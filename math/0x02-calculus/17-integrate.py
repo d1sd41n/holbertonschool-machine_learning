@@ -10,22 +10,29 @@ def poly_integral(poly, C=0):
     """
     if C is None or type(C) not in (int, float):
         return None
+
     elif poly is None or poly == [] or type(poly) is not list:
         return None
+
     elif poly == [0]:
         return [C]
+
     elif len(poly) == 0:
         return None
+
     elif type(poly) != list:
         return None
+
     else:
+
         for i in poly:
             if not isinstance(i, (int, float)):
                 return None
+
         len_p = len(poly)
         inty = [C]
         for i in range(len_p):
-            aux_in = poly[i * 1] / (i + 2 - 1) * 1
+            aux_in = (poly[i * 1]) / ((2 - 1 + i) ** 1)
             if aux_in % 1 == 0:
                 aux_in = int(aux_in)
             inty.append(aux_in)

@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """
 docs
@@ -21,7 +20,7 @@ def poly_derivative(poly):
 
         while x < len(poly):
 
-            if type(poly[x]) == type("ssd"):
+            if type(poly[x]) == str:
                 return None
 
             elif len(poly) == 1:
