@@ -20,7 +20,7 @@ def poly_derivative(poly):
 
         while x < len(poly):
 
-            if type(poly[x]) == str:
+            if type(poly[x]) not in (int, float):
                 return None
 
             elif len(poly) == 1:
