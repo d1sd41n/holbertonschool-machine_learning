@@ -24,6 +24,7 @@ class Poisson:
 
     def pmf(self, k):
         """docs"""
+        k = int(k)
         if k < 0:
             return 0
         euler = 2.7182818285
@@ -38,6 +39,7 @@ class Poisson:
 
     def cdf(self, k):
         """docs"""
+        k = int(k)
         if k < 0:
             return 0
         euler = 2.7182818285
