@@ -31,6 +31,7 @@ class Binomial():
 
     def pmf(self, k):
         """docs"""
+        k = int(k)
         if k < 0:
             return 0
         else:
@@ -39,6 +40,7 @@ class Binomial():
 
     def cdf(self, k):
         """docs"""
+        k = int(k)
         if k < 0:
             return 0
         else:
