@@ -2,14 +2,6 @@
 """docs"""
 
 
-def factorial(k):
-    """docs"""
-    if k == 0:
-        return 1
-    else:
-        return k * factorial(k - 1)
-
-
 class Binomial():
     """docs"""
 
@@ -54,3 +46,11 @@ class Binomial():
             for i in range(k + 1):
                 c += self.pmf(i)
             return c
+
+
+def factorial(k):
+    """docs"""
+    if k == 0:
+        return 1
+    else:
+        return k * factorial(k - 1)
