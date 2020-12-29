@@ -1,16 +1,55 @@
 #!/usr/bin/env python3
+"""[summary]
 
+    Raises:
+        TypeError: [description]
+        ValueError: [description]
+"""
 import numpy as np
 
-Neuron = __import__('2-neuron').Neuron
 
-lib_train = np.load('../data/Binary_Train.npz')
-X_3D, Y = lib_train['X'], lib_train['Y']
-X = X_3D.reshape((X_3D.shape[0], -1)).T
+class Neuron:
+    def __init__(self, nx):
+        """[summary]
 
-np.random.seed(0)
-neuron = Neuron(X.shape[0])
-neuron._Neuron__b = 1
-A = neuron.forward_prop(X)
-if (A is neuron.A):
-    print(A)
+        Args:
+            nx ([type]): [description]
+
+        Raises:
+            TypeError: [description]
+            ValueError: [description]
+        """
+        if not isinstance(nx, int):
+            raise TypeError("nx must be an integer")
+        if nx < 1:
+            raise ValueError("nx must be a positive integer")
+        self.__W = np.random.normal(size=(1, nx))
+        self.__b = 0
+        self.__A = 0
+
+    @property
+    def W(self):
+        """[summary]
+
+        Returns:
+            [type]: [description]
+        """
+        return self.__W
+
+    @property
+    def b(self):
+        """[summary]
+
+        Returns:
+            [type]: [description]
+        """
+        return self.__b
+
+    @property
+    def A(self):
+        """[summary]
+
+        Returns:
+            [type]: [description]
+        """
+        return self.__A
