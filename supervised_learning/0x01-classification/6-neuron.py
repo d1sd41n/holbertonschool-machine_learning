@@ -9,6 +9,9 @@ import numpy as np
 
 
 class Neuron:
+    """[summary]
+    """
+
     def __init__(self, nx):
         """[summary]
 

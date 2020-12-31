@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 
 
 class Neuron:
+    """[summary]
+    """
+
     def __init__(self, nx):
         """[summary]
 
