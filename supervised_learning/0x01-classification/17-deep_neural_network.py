@@ -59,3 +59,30 @@ class DeepNeuralNetwork:
             else:
                 self.weights[w_lk] = np.random.randn(
                     layers[i], layers[i - 1]) * np.sqrt(2 / layers[i - 1])
+
+    @property
+    def L(self):
+        """[summary]
+
+        Returns:
+            [type]: [description]
+        """
+        return self.__L
+
+    @property
+    def cache(self):
+        """[summary]
+
+        Returns:
+            [type]: [description]
+        """
+        return self.__cache
+
+    @property
+    def weights(self):
+        """[summary]
+
+        Returns:
+            [type]: [description]
+        """
+        return self.__weights
