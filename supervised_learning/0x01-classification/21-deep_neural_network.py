@@ -165,5 +165,5 @@ class DeepNeuralNetwork:
                     weights_c["W{}".format(i + 1)].T, dz) * A * (1 - A)
             dw = np.matmul(dz, cache["A{}".format(i - 1)].T) / m
             db = np.sum(dz, axis=1, keepdims=True) / m
-            self.weights[w_k] -= alpha * dw
-            self.weights[b_k] -= alpha * db
+            self.weights[w_k] = self.weights[w_k] - alpha * dw
+            self.weights[b_k] = self.weights[b_k] - alpha * db
