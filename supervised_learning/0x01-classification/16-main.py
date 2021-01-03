@@ -7,6 +7,9 @@ Deep = __import__('16-deep_neural_network').DeepNeuralNetwork
 lib_train = np.load('../data/Binary_Train.npz')
 X_3D, Y = lib_train['X'], lib_train['Y']
 X = X_3D.reshape((X_3D.shape[0], -1)).T
+print(X_3D.shape)
+print(X.shape)
+
 
 np.random.seed(0)
 deep = Deep(X.shape[0], [5, 3, 1])
