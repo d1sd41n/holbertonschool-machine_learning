@@ -7,8 +7,6 @@ Raises:
     TypeError: [description]
     TypeError: [description]
 """
-
-
 import numpy as np
 
 
@@ -38,11 +36,11 @@ class DeepNeuralNetwork:
         if len(layers) == 0:
             raise TypeError('layers must be a list of positive integers')
 
-        self.nx = nx
-        self.layers = layers
-        self.cache = {}
-        self.weights = {}
-        self.L = len(layers)
+        self.__nx = nx
+        self.__layers = layers
+        self.__cache = {}
+        self.__weights = {}
+        self.__L = len(layers)
 
         for i in range(0, len(layers)):
             if not isinstance(layers[i], int) or layers[i] < 1:
@@ -51,13 +49,13 @@ class DeepNeuralNetwork:
             w_lk = "W{}".format(i + 1)
             b_k = "b{}".format(i + 1)
 
-            self.weights[b_k] = np.zeros((layers[i], 1))
+            self.__weights[b_k] = np.zeros((layers[i], 1))
 
             if i == 0:
-                self.weights[w_lk] = np.random.randn(
+                self.__weights[w_lk] = np.random.randn(
                     layers[i], nx) * np.sqrt(2 / nx)
             else:
-                self.weights[w_lk] = np.random.randn(
+                self.__weights[w_lk] = np.random.randn(
                     layers[i], layers[i - 1]) * np.sqrt(2 / layers[i - 1])
 
     @property
@@ -86,3 +84,32 @@ class DeepNeuralNetwork:
             [type]: [description]
         """
         return self.__weights
+
+    def sigmoid(self, Z):
+        """[summary]
+
+        Args:
+            Z ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        return 1 / (1 + np.exp(-Z))
+
+    def forward_prop(self, X):
+        """[summary]
+
+        Args:
+            X ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        self.__cache['A0'] = X
+        for i in range(0, self.__L):
+            W = self.__weights["W{}".format(i + 1)]
+            b = self.__weights["b{}".format(i + 1)]
+            A = self.__cache["A{}".format(i)]
+            Z = np.matmul(W, A) + b
+            self.__cache["A{}".format(i + 1)] = self.sigmoid(Z)
+        return self.__cache["A{}".format(i + 1)], self.__cache
