@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Contains the one_hot_encode method"""
+"""[summary]
+
+Returns:
+    [type]: [description]
+"""
 
 import numpy as np
 
