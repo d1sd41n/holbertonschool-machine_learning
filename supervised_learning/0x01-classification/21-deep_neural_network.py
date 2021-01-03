@@ -161,9 +161,9 @@ class DeepNeuralNetwork:
             if i == self.L:
                 dz = A - Y
             else:
-                dz = np.matmul(
-                    weights_c["W{}".format(i + 1)].T, dz) * A * (1 - A)
-            dw = np.matmul(dz, cache["A{}".format(i - 1)].T) / m
-            db = np.sum(dz, axis=1, keepdims=True) / m
-            self.weights[w_k] = self.weights[w_k] - alpha * dw
-            self.weights[b_k] = self.weights[b_k] - alpha * db
+                dz = A * (1 - A) * np.matmul(
+                    weights_c["W{}".format(i + 1)].T, dz)
+            self.weights[w_k] = self.weights[w_k] - alpha * \
+                (np.matmul(dz, cache["A{}".format(i - 1)].T) / m)
+            self.weights[b_k] = self.weights[b_k] - alpha * \
+                (np.sum(dz, axis=1, keepdims=True) / m)
