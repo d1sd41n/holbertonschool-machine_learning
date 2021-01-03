@@ -4,7 +4,6 @@
 Returns:
     [type]: [description]
 """
-
 import numpy as np
 
 
