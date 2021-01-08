@@ -19,5 +19,4 @@ def calculate_accuracy(y, y_pred):
     """
     y_hot = tf.argmax(y, axis=1)
     y_p_hot = tf.argmax(y_pred, axis=1)
-    comp = tf.reduce_mean(tf.cast(tf.equal(y_hot, y_p_hot), dtype=tf.float32))
-    return comp
+    return tf.reduce_mean(tf.cast(tf.equal(y_hot, y_p_hot), dtype=tf.float32))
