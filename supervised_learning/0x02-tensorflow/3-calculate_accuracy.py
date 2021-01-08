@@ -17,6 +17,6 @@ def calculate_accuracy(y, y_pred):
     Returns:
         [type]: [description]
     """
-    y_hot = tf.argmax(y, axis=1)
-    y_p_hot = tf.argmax(y_pred, axis=1)
-    return tf.reduce_mean(tf.cast(tf.equal(y_hot, y_p_hot), dtype=tf.float32))
+    y = tf.argmax(y, axis=1)
+    y_hat = tf.argmax(y_pred, axis=1)
+    return tf.reduce_mean(tf.cast(tf.equal(y, y_hat), dtype=tf.float32))
