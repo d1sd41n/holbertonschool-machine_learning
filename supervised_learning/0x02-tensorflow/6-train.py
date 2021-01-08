@@ -47,6 +47,8 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 
+    iterations = 10
+
     with tf.Session() as sess:
         sess.run(init)
         for i in range(iterations + 1):
