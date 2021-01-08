@@ -27,7 +27,7 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
         activations ([type]): [description]
         alpha ([type]): [description]
         iterations ([type]): [description]
-        save_path (str, optional): [description]. Defaults to "/tmp/model.ckpt".
+        save_path (str, optional): [description].
 
     Returns:
         [type]: [description]
