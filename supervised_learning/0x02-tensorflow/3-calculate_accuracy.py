@@ -1,12 +1,23 @@
 #!/usr/bin/env python3
+"""[summary]
 
+Returns:
+    [type]: [description]
+"""
 import tensorflow as tf
 
-create_placeholders = __import__('0-create_placeholders').create_placeholders
-forward_prop = __import__('2-forward_prop').forward_prop
-calculate_accuracy = __import__('3-calculate_accuracy').calculate_accuracy
 
-x, y = create_placeholders(784, 10)
-y_pred = forward_prop(x, [256, 256, 10], [tf.nn.tanh, tf.nn.tanh, None])
-accuracy = calculate_accuracy(y, y_pred)
-print(accuracy)
+def calculate_accuracy(y, y_pred):
+    """[summary]
+
+    Args:
+        y ([type]): [description]
+        y_pred ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    y_hot = tf.argmax(y, axis=1)
+    y_p_hot = tf.argmax(y_pred, axis=1)
+    comp = tf.reduce_mean(tf.cast(tf.equal(y_hot, y_p_hot), dtype=tf.float32))
+    return comp
