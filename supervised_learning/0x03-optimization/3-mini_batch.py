@@ -47,8 +47,8 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
         Y_valid ([type]): [description]
         batch_size (int, optional): [description]. Defaults to 32.
         epochs (int, optional): [description]. Defaults to 5.
-        load_path (str, optional): [description]. Defaults to "/tmp/model.ckpt".
-        save_path (str, optional): [description]. Defaults to "/tmp/model.ckpt".
+        load_path (str, optional): [description].
+        save_path (str, optional): [description]..
 
     Returns:
         [type]: [description]
