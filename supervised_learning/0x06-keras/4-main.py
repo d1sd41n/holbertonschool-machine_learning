@@ -11,7 +11,9 @@ train_model = __import__('4-train').train_model
 if __name__ == '__main__':
     datasets = np.load('../data/MNIST.npz')
     X_train = datasets['X_train']
+    print(X_train.shape)
     X_train = X_train.reshape(X_train.shape[0], -1)
+    print(X_train.shape)
     Y_train = datasets['Y_train']
     Y_train_oh = one_hot(Y_train)
 
