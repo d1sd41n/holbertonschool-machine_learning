@@ -10,6 +10,7 @@ if __name__ == "__main__":
     X_train = lib['X_train']
     m, h, w = X_train.shape
     X_train_a = X_train.reshape((-1, h, w, 1))
+    print(X_train_a.shape)
     X_train_b = 1 - X_train_a
     X_train_c = np.concatenate((X_train_a, X_train_b), axis=3)
 

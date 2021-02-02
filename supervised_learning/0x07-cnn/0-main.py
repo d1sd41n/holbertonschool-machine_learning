@@ -8,8 +8,10 @@ if __name__ == "__main__":
     np.random.seed(0)
     lib = np.load('../data/MNIST.npz')
     X_train = lib['X_train']
+    print(X_train.shape)
     m, h, w = X_train.shape
     X_train_c = X_train.reshape((-1, h, w, 1))
+    print(X_train_c.shape)
 
     W = np.random.randn(3, 3, 1, 2)
     b = np.random.randn(1, 1, 1, 2)
@@ -17,7 +19,7 @@ if __name__ == "__main__":
     def relu(Z):
         return np.maximum(Z, 0)
 
-    plt.imshow(X_train[0])
+    plt.imshow(X_train_c[0])
     plt.show()
     A = conv_forward(X_train_c, W, b, relu, padding='valid')
     print(A.shape)
