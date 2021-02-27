@@ -117,8 +117,10 @@ class Yolo:
         Returns:
             [type]: [description]
         """
-        return (glob.glob(folder_path + "/*"),
-                [cv2.imread(i) for i in path_i1])
+        path_i1 = glob.glob(folder_path + "/*")
+        l_path_2 = [cv2.imread(i) for i in path_i1]
+
+        return l_path_2, path_i1
 
     @staticmethod
     def iou(box1, box2):
