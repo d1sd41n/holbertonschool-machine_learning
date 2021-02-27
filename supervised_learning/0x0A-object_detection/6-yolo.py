@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """[summary]
-
     Returns:
         [type]: [description]
     """
@@ -42,12 +41,10 @@ class Yolo:
 
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
         """[summary]
-
         Args:
             boxes ([type]): [description]
             box_confidences ([type]): [description]
             box_class_probs ([type]): [description]
-
         Returns:
             [type]: [description]
         """
@@ -75,7 +72,6 @@ class Yolo:
 
     def show_boxes(self, image, boxes, box_classes, box_scores, file_name):
         """[summary]
-
         Args:
             image ([type]): [description]
             boxes ([type]): [description]
@@ -109,12 +105,10 @@ class Yolo:
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """[summary]
-
         Args:
             filtered_boxes ([type]): [description]
             box_classes ([type]): [description]
             box_scores ([type]): [description]
-
         Returns:
             [type]: [description]
         """
@@ -149,10 +143,8 @@ class Yolo:
     @staticmethod
     def load_images(folder_path):
         """[summary]
-
         Args:
             folder_path ([type]): [description]
-
         Returns:
             [type]: [description]
         """
@@ -164,11 +156,9 @@ class Yolo:
     @staticmethod
     def iou(box1, box2):
         """[summary]
-
         Args:
             box1 ([type]): [description]
             box2 ([type]): [description]
-
         Returns:
             [type]: [description]
         """
@@ -185,10 +175,8 @@ class Yolo:
 
     def preprocess_images(self, images):
         """[summary]
-
         Args:
             images ([type]): [description]
-
         Returns:
             [type]: [description]
         """
@@ -211,11 +199,9 @@ class Yolo:
 
     def process_outputs(self, outputs, image_size):
         """[summary]
-
         Args:
             outputs ([type]): [description]
             image_size ([type]): [description]
-
         Returns:
             [type]: [description]
         """

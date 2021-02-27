@@ -16,4 +16,4 @@ if __name__ == '__main__':
             ind = i
             break
     print(image_paths[ind])
-    print(predictions[ind]
+    print(predictions[ind])
