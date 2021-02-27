@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """[summary]
-
 Returns:
     [type]: [description]
 """
@@ -10,10 +9,8 @@ import numpy as np
 
 def sigmoid(x):
     """[summary]
-
     Args:
         x ([type]): [description]
-
     Returns:
         [type]: [description]
     """
@@ -26,7 +23,6 @@ class Yolo:
 
     def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
         """[summary]
-
         Args:
             model_path ([type]): [description]
             classes_path ([type]): [description]
@@ -43,11 +39,9 @@ class Yolo:
 
     def process_outputs(self, outputs, image_size):
         """[summary]
-
         Args:
             outputs ([type]): [description]
             image_size ([type]): [description]
-
         Returns:
             [type]: [description]
         """
