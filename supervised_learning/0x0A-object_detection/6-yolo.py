@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """[summary]
 
-Returns:
-    [type]: [description]
-"""
+    Returns:
+        [type]: [description]
+    """
 import tensorflow.keras as K
 import numpy as np
 import cv2
@@ -82,27 +82,22 @@ class Yolo:
             box_classes ([type]): [description]
             box_scores ([type]): [description]
             file_name ([type]): [description]
-
-        Returns:
-            [type]: [description]
         """
         for i in range(len(boxes)):
             score = "{:.2f}".format(box_scores[i])
-            ini_p = (int(boxes[i, 0]), int(boxes[i, 1]))
-            e_n = (int(boxes[i, 2]), int(boxes[i, 3]))
+            s_init = (int(boxes[i, 0]), int(boxes[i, 1]))
+            es_end = (int(boxes[i, 2]), int(boxes[i, 3]))
             image = cv2.rectangle(image,
-                                  ini_p, e_n,
-                                  (255, 0, 0),
-                                  2)
+                                  s_init, es_end,
+                                  (255, 0, 0), 2)
             font = cv2.FONT_HERSHEY_SIMPLEX
-            b = (int(boxes[i, 0]), int(boxes[i, 1] - 5))
+            org = (int(boxes[i, 0]), int(boxes[i, 1] - 5))
             image = cv2.putText(image,
                                 self.class_names[box_classes[i]] + score,
-                                b,
+                                org,
                                 font,
                                 0.5,
-                                (0, 0, 255),
-                                1,
+                                (0, 0, 255), 1,
                                 cv2.LINE_AA)
         cv2.imshow(file_name, image)
         if cv2.waitKey(0) == ord('s'):
