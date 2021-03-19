@@ -112,6 +112,14 @@ def cofactor(matrix):
 
 
 def adjugate(matrix):
+    """[summary]
+
+    Args:
+        matrix ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     cofacto_r = cofactor(matrix)
     adjugate = []
     for row in range(len(matrix)):
