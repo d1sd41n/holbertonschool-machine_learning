@@ -3,6 +3,57 @@
     """
 
 
+def minor(matrix):
+    """[summary]
+
+    Args:
+        matrix ([type]): [description]
+
+    Raises:
+        TypeError: [description]
+        TypeError: [description]
+        TypeError: [description]
+        ValueError: [description]
+
+    Returns:
+        [type]: [description]
+    """
+
+    if type(matrix) is not list or len(matrix) == 0:
+        raise TypeError("matrix must be a list of lists")
+
+    if not matrix:
+        raise TypeError("matrix must be a list of lists")
+
+    for row in matrix:
+        if type(row) is not list:
+            raise TypeError("matrix must be a list of lists")
+        if len(row) != len(matrix):
+            raise ValueError("matrix must be a non-empty square matrix")
+
+    if len(matrix[0]) == 1:
+        return [[1]]
+
+    minor_m = []
+    for r in range(len(matrix)):
+        min_r = []
+        for c in range(len(matrix)):
+            row = [matrix[i] for i in range(len(matrix)) if i != r]
+            sub_m = []
+
+            for r_aux in row:
+                aux = []
+                for col in range(len(matrix)):
+                    if col != c:
+                        aux.append(r_aux[col])
+                sub_m.append(aux)
+
+            det = determinant(sub_m)
+            min_r.append(det)
+        minor_m.append(min_r)
+    return minor_m
+
+
 def determinant(matrix):
     """[summary]
 
@@ -58,53 +109,3 @@ def cofactor(matrix):
         for col in range(len(cofactor[0])):
             cofactor[row][col] *= ((-1) ** (row + col))
     return cofactor
-
-    def minor(matrix):
-    """[summary]
-
-    Args:
-        matrix ([type]): [description]
-
-    Raises:
-        TypeError: [description]
-        TypeError: [description]
-        TypeError: [description]
-        ValueError: [description]
-
-    Returns:
-        [type]: [description]
-    """
-
-    if type(matrix) is not list or len(matrix) == 0:
-        raise TypeError("matrix must be a list of lists")
-
-    if not matrix:
-        raise TypeError("matrix must be a list of lists")
-
-    for row in matrix:
-        if type(row) is not list:
-            raise TypeError("matrix must be a list of lists")
-        if len(row) != len(matrix):
-            raise ValueError("matrix must be a non-empty square matrix")
-
-    if len(matrix[0]) == 1:
-        return [[1]]
-
-    minor_m = []
-    for r in range(len(matrix)):
-        min_r = []
-        for c in range(len(matrix)):
-            row = [matrix[i] for i in range(len(matrix)) if i != r]
-            sub_m = []
-
-            for r_aux in row:
-                aux = []
-                for col in range(len(matrix)):
-                    if col != c:
-                        aux.append(r_aux[col])
-                sub_m.append(aux)
-
-            det = determinant(sub_m)
-            min_r.append(det)
-        minor_m.append(min_r)
-    return minor_m
