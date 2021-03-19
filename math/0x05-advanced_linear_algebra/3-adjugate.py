@@ -114,10 +114,8 @@ def cofactor(matrix):
 def adjugate(matrix):
     cofacto_r = cofactor(matrix)
     adjugate = []
-
     for row in range(len(matrix)):
         adjugate.append([])
         for col in range(len(matrix)):
             adjugate[row].append(cofacto_r[col][row])
-
     return adjugate
