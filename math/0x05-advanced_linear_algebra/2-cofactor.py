@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""[summary]
+    """
 
 
 def minor(matrix):
