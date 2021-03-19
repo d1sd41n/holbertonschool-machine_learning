@@ -145,12 +145,22 @@ def inverse(matrix):
         [type]: [description]
     """
 
+    if type(matrix) is not list or len(matrix) == 0:
+        raise TypeError("matrix must be a list of lists")
+
+    for row in matrix:
+        if type(row) is not list:
+            raise TypeError("matrix must be a list of lists")
+        if len(row) != len(matrix):
+            raise ValueError("matrix must be a non-empty square matrix")
+
+    if len(matrix) == 1:
+        return [[1]]
+
     det = determinant(matrix)
     if det == 0:
         return None
-
     adj = adjugate(matrix)
-
     inverse = []
     for row in adj:
         aux = []
