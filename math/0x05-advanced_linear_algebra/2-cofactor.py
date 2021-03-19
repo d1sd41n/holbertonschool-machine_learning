@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 15 7:45:46 2021
-@author: Robinson Montes
-"""
 
 
 def minor(matrix):
@@ -108,10 +103,7 @@ def cofactor(matrix):
         [type]: [description]
     """
     cofactor = minor(matrix)
-
     for row in range(len(cofactor)):
-
         for col in range(len(cofactor[0])):
-
             cofactor[row][col] *= ((-1) ** (row + col))
     return cofactor
