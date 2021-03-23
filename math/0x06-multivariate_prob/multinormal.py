@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+"""[summary]
+
+Raises:
+    TypeError: [description]
+    ValueError: [description]
+    TypeError: [description]
+    ValueError: [description]
+    ValueError: [description]
+
+Returns:
+    [type]: [description]
+"""
 import numpy as np
 
 
