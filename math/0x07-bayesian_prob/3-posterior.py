@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 """[summary]
 
-    Raises:
-        ValueError: [description]
-        ValueError: [description]
-        ValueError: [description]
-        TypeError: [description]
-        TypeError: [description]
-        ValueError: [description]
-        ValueError: [description]
-        ValueError: [description]
+Raises:
+    ValueError: [description]
+    ValueError: [description]
+    ValueError: [description]
+    TypeError: [description]
+    TypeError: [description]
+    ValueError: [description]
+    ValueError: [description]
+    ValueError: [description]
 
-    Returns:
-        [type]: [description]
-    """
+Returns:
+    [type]: [description]
+"""
 import numpy as np
 
 
-def marginal(x, n, P, Pr):
+def posterior(x, n, P, Pr):
     """[summary]
 
     Args:
@@ -52,10 +52,11 @@ def marginal(x, n, P, Pr):
         raise TypeError('Pr must be a numpy.ndarray with the same shape as P')
     if np.any(P < 0) or np.any(P > 1):
         raise ValueError('All values in P must be in the range [0, 1]')
-    if np.any(Pr < 0) or np.any(P > 1):
-        raise ValueError('All values in Pr must be in the range [0, 1]')
     if not np.isclose([np.sum(Pr)], [1.])[0]:
         raise ValueError('Pr must sum to 1')
-    return np.sum((np.math.factorial(n) /
-                   (np.math.factorial(x) * np.math.factorial(n - x))
-                   ) * (P ** x) * (1 - P) ** (n - x) * Pr)
+    return (((np.math.factorial(n) /
+              (np.math.factorial(x) * np.math.factorial(n - x)
+               )) * (P ** x) * (1 - P)**(n - x)) * Pr) / np.sum(
+                   ((np.math.factorial(n) /
+                     (np.math.factorial(x) * np.math.factorial(n - x)
+                      )) * (P ** x) * (1 - P) ** (n - x)) * Pr)
