@@ -1,31 +1,54 @@
 #!/usr/bin/env python3
+"""[summary]
 
-import matplotlib.pyplot as plt
+Returns:
+    [type]: [description]
+"""
 import numpy as np
-BIC = __import__('9-BIC').BIC
+initialize = __import__('4-initialize').initialize
+expectation = __import__('6-expectation').expectation
+maximization = __import__('7-maximization').maximization
 
-if __name__ == '__main__':
-    np.random.seed(11)
-    a = np.random.multivariate_normal([30, 40], [[75, 5], [5, 75]], size=10000)
-    b = np.random.multivariate_normal([5, 25], [[16, 10], [10, 16]], size=750)
-    c = np.random.multivariate_normal([60, 30], [[16, 0], [0, 16]], size=750)
-    d = np.random.multivariate_normal(
-        [20, 70], [[35, 10], [10, 35]], size=1000)
-    X = np.concatenate((a, b, c, d), axis=0)
-    np.random.shuffle(X)
-    best_k, best_result, l, b = BIC(X, kmin=1, kmax=10)
-    print(best_k)
-    print(best_result)
-    print(l)
-    print(b)
-    x = np.arange(1, 11)
-    plt.plot(x, l, 'r')
-    plt.xlabel('Clusters')
-    plt.ylabel('Log Likelihood')
-    plt.tight_layout()
-    plt.show()
-    plt.plot(x, b, 'b')
-    plt.xlabel('Clusters')
-    plt.ylabel('BIC')
-    plt.tight_layout()
-    plt.show()
+
+def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
+    """[summary]
+
+    Args:
+        X ([type]): [description]
+        k ([type]): [description]
+        iterations (int, optional): [description]. Defaults to 1000.
+        tol ([type], optional): [description]. Defaults to 1e-5.
+        verbose (bool, optional): [description]. Defaults to False.
+
+    Returns:
+        [type]: [description]
+    """
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+        return None, None, None, None, None
+    if type(k) != int or k <= 0 or k >= X.shape[0]:
+        return None, None, None, None, None
+    if type(iterations) != int or iterations <= 0:
+        return None, None, None, None, None
+    if type(tol) != float or tol <= 0:
+        return None, None, None, None, None
+    if type(verbose) != bool:
+        return None, None, None, None, None
+    pi, m, S = initialize(X, k)
+    prev_like = 0
+    g, likelihood = expectation(X, pi, m, S)
+    for i in range(iterations):
+        if verbose and (i % 10 == 0):
+            msg = 'Log Likelihood after {} iterations: {}'\
+                .format(i, likelihood.round(5))
+            print(msg)
+        pi, m, S = maximization(X, g)
+        g, likelihood = expectation(X, pi, m, S)
+
+        if abs(likelihood - prev_like) <= tol:
+            break
+        prev_like = likelihood
+    if verbose:
+        msg = 'Log Likelihood after {} iterations: {}'\
+            .format(i + 1, likelihood.round(5))
+        print(msg)
+    return pi, m, S, g, likelihood
