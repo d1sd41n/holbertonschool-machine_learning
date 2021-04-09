@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import numpy as np
 
+
 def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
     """[summary]
 
@@ -66,6 +67,7 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
         Emission = Emission / denominator
     return Transition, Emission
 
+
 def backward(Observation, Emission, Transition, Initial):
     """[summary]
 
@@ -111,6 +113,7 @@ def backward(Observation, Emission, Transition, Initial):
     P = np.sum(P_first)
     return P, B__
 
+
 def forward(Observation, Emission, Transition, Initial):
     """[summary]
 
@@ -154,6 +157,3 @@ def forward(Observation, Emission, Transition, Initial):
         prob = np.multiply(state, Emission[:, Obs_i])
         F[:, i] = prob
     return np.sum(F[:, T - 1]), F
-
-
-
