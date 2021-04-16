@@ -52,12 +52,14 @@ class GaussianProcess:
         return m_se, np.diag(cov_s)
 
     def kernel(self, X1, X2):
-        """
-        Isotropic squared exponential kernel.
-        - X1: Array of m points (m x d).
-        - X2: Array of n points (n x d).
+        """[summary]
+
+        Args:
+            X1 ([type]): [description]
+            X2 ([type]): [description]
+
         Returns:
-            (m x n) kernel matrix.
+            [type]: [description]
         """
 
         sqdist = np.sum(X1 ** 2,

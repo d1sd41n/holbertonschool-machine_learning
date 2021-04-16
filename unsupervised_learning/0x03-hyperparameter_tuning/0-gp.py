@@ -30,14 +30,16 @@ class GaussianProcess:
         self.K = self.kernel(X_init, X_init)
 
     def kernel(self, X1, X2):
-        """
-        Isotropic squared exponential kernel.
-        - X1: Array of m points (m x d).
-        - X2: Array of n points (n x d).
-        Returns:
-            (m x n) kernel matrix.
-        """
+        """[summary]
 
+        Args:
+            X1 ([type]): [description]
+            X2 ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        
         sqdist = np.sum(X1 ** 2,
                         1).reshape(-1, 1) \
             + np.sum(X2 ** 2, 1) - 2 * np.dot(X1, X2.T)
