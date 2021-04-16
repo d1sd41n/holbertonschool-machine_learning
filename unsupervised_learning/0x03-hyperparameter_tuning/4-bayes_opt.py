@@ -44,19 +44,22 @@ class BayesianOptimization:
         Returns:
             [type]: [description]
         """
+        ms, _ = self.gp.predict(self.gp.X)
         mu, sigma = self.gp.predict(self.X_s)
-        mu = mu.reshape(-1, 1)
         sigma = sigma.reshape(-1, 1)
-        if self.minimize:
-            min_val = np.min(self.gp.Y)
-            num = min_val - mu - self.xsi
-        else:
-            max_val = np.max(self.gp.Y)
-            num = mu - max_val - self.xsi
-        Z = num.astype(float) / sigma.astype(float)
-        Z[Z == np.inf] = 0
-        cdf_Z = norm.cdf(Z)
-        pdf_Z = norm.pdf(Z)
-        EI = num * cdf_Z + sigma * pdf_Z
-        EI = EI.reshape(-1)
-        return self.X_s[np.argmax(EI)], EI
+
+        with np.errstate(divide='warn'):
+            if self.minimize is True:
+                ms_opt = np.amin(self.gp.Y)
+                imp = (ms_opt - mu - self.xsi
+                       ).reshape(-1, 1)
+            else:
+                ms_opt = np.amax(self.gp.Y)
+                imp = (mu - ms_opt - self.xsi
+                       ).reshape(-1, 1)
+
+            Z = imp / sigma
+            EI = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
+            EI[sigma == 0.0] = 0.0
+
+        return self.X_s[np.argmax(EI)], EI.reshape(-1)
