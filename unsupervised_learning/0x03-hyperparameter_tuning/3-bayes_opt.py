@@ -25,10 +25,14 @@ class BayesianOptimization:
             minimize (bool, optional): [description]. Defaults to True.
         """
         self.f = f
-        self.gp = GP(X_init, Y_init, l, sigma_f)
+        self.gp = GP(X_init,
+                     Y_init, l,
+                     sigma_f
+                     )
 
-        _min, _max = bounds
-        self.X_s = np.linspace(_min, _max, ac_samples).reshape(-1, 1)
+        t_min, t_max = bounds
+        self.X_s = np.linspace(t_min, t_max,
+                               ac_samples).reshape(-1, 1)
 
         self.xsi = xsi
 
