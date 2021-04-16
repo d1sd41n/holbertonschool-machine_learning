@@ -28,7 +28,7 @@ class GaussianProcess:
         self.sigma_f = sigma_f
 
         self.K = self.kernel(X_init, X_init)
-    
+
     def update(self, X_new, Y_new):
         """[summary]
 
@@ -36,10 +36,11 @@ class GaussianProcess:
             X_new ([type]): [description]
             Y_new ([type]): [description]
         """
-        self.X = np.append(self.X, [X_new], axis=0)
-        
-        self.Y = np.append(self.Y, [Y_new], axis=0)
-        
+
+        self.X = np.append(self.X, X_new)
+        self.X = self.X[:, np.newaxis]
+        self.Y = np.append(self.Y, Y_new)
+        self.Y = self.Y[:, np.newaxis]
         self.K = self.kernel(self.X, self.X)
 
     def predict(self, X_s):
