@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """[summary]
+
+Returns:
+    [type]: [description]
 """
 import numpy as np
+from scipy.stats import norm
 GP = __import__('2-gp').GaussianProcess
 
 
 class BayesianOptimization:
     """[summary]
     """
-
     def __init__(self, f, X_init, Y_init, bounds, ac_samples,
                  l=1, sigma_f=1, xsi=0.01, minimize=True):
         """[summary]
@@ -25,17 +28,11 @@ class BayesianOptimization:
             minimize (bool, optional): [description]. Defaults to True.
         """
         self.f = f
-        self.gp = GP(X_init,
-                     Y_init, l,
-                     sigma_f
-                     )
+        self.gp = GP(X_init, Y_init, l, sigma_f)
 
-        t_min, t_max = bounds
-        self.X_s = np.linspace(t_min, t_max,
-                               ac_samples).reshape(-1, 1)
-
+        b_min, b_max = bounds
+        self.X_s = np.linspace(b_min, b_max, ac_samples).reshape(-1, 1)
         self.xsi = xsi
-
         self.minimize = minimize
 
     def acquisition(self):
@@ -44,20 +41,25 @@ class BayesianOptimization:
         Returns:
             [type]: [description]
         """
-        X = self.gp.X
-        mu_sample, _ = self.gp.predict(X)
         mu, sigma = self.gp.predict(self.X_s)
+        mu = mu.reshape(-1, 1)
         sigma = sigma.reshape(-1, 1)
-        with np.errstate(divide='warn'):
-            if self.minimize is True:
-                mu_sample_opt = np.amin(self.gp.Y)
-                imp = (mu_sample_opt - mu - self.xsi).reshape(-1, 1)
-            else:
-                mu_sample_opt = np.amax(self.gp.Y)
-                imp = (mu - mu_sample_opt - self.xsi).reshape(-1, 1)
+        if self.minimize:
+            min_val = np.min(self.gp.Y)
+            num = min_val - mu - self.xsi
+        else:
+            max_val = np.max(self.gp.Y)
+            num = mu - max_val - self.xsi
 
-            Z = imp / sigma
-            EI = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
-            EI[sigma == 0.0] = 0.0
-        X_next = self.X_s[np.argmax(EI)]
-        return X_next, EI.reshape(-1)
+        Z = num.astype(float) / sigma.astype(float)
+        Z[Z == np.inf] = 0
+
+        cdf_Z = norm.cdf(Z)
+        pdf_Z = norm.pdf(Z)
+
+        EI = num * cdf_Z + sigma * pdf_Z
+        best_X = self.X_s[np.argmax(EI)]
+
+        EI = EI.reshape(-1)
+
+        return best_X, EI
