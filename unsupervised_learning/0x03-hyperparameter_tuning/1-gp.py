@@ -29,6 +29,28 @@ class GaussianProcess:
 
         self.K = self.kernel(X_init, X_init)
 
+    def predict(self, X_s):
+        """[summary]
+
+        Args:
+            X_s ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+
+        K = self.K
+
+        K_s = self.kernel(self.X, X_s)
+        K_inv = np.linalg.inv(K)
+        m_se = K_s.T.dot(K_inv).dot(self.Y)
+        m_se = m_se.reshape(-1)
+        cov_s = self.kernel(X_s, X_s) - K_s.T.dot(K_inv).dot(K_s)
+
+        var_s = np.diag(cov_s)
+
+        return m_se, np.diag(cov_s)
+
     def kernel(self, X1, X2):
         """
         Isotropic squared exponential kernel.
@@ -44,31 +66,3 @@ class GaussianProcess:
 
         return self.sigma_f ** 2 * np.exp(
             -0.5 / self.l ** 2 * sqdist)
-
-    def predict(self, X_s):
-        """[summary]
-
-        Args:
-            X_s ([type]): [description]
-
-        Returns:
-            [type]: [description]
-        """
-        
-        Y_train = self.Y
-        X_train = self.X
-        
-        sigma_y = 0
-        K = self.K
-        K_s = self.kernel(X_train, X_s)
-        
-        K_ss = self.kernel(X_s, X_s)
-        K_inv = np.linalg.inv(K)
-        
-        m_se = K_s.T.dot(K_inv).dot(Y_train)
-        
-        m_se = m_se.reshape(-1)
-        cov_s = np.diag(K_ss - K_s.T.dot(
-            K_inv).dot(K_s))
-        
-        return m_se, cov_s
