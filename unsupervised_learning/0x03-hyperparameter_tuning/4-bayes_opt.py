@@ -12,6 +12,7 @@ GP = __import__('2-gp').GaussianProcess
 class BayesianOptimization:
     """[summary]
     """
+
     def __init__(self, f, X_init, Y_init, bounds, ac_samples,
                  l=1, sigma_f=1, xsi=0.01, minimize=True):
         """[summary]
@@ -29,7 +30,6 @@ class BayesianOptimization:
         """
         self.f = f
         self.gp = GP(X_init, Y_init, l, sigma_f)
-
         b_min, b_max = bounds
         self.X_s = np.linspace(b_min, b_max, ac_samples).reshape(-1, 1)
         self.xsi = xsi
@@ -50,16 +50,10 @@ class BayesianOptimization:
         else:
             max_val = np.max(self.gp.Y)
             num = mu - max_val - self.xsi
-
         Z = num.astype(float) / sigma.astype(float)
         Z[Z == np.inf] = 0
-
         cdf_Z = norm.cdf(Z)
         pdf_Z = norm.pdf(Z)
-
         EI = num * cdf_Z + sigma * pdf_Z
         best_X = self.X_s[np.argmax(EI)]
-
-        EI = EI.reshape(-1)
-
-        return best_X, EI
+        return best_X, EI.reshape(-1)
