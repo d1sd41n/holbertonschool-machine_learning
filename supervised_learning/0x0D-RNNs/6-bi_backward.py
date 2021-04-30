@@ -25,7 +25,7 @@ class BidirectionalCell:
         self.bhf = np.zeros((1, h))
         self.bhb = np.zeros((1, h))
         self.by = np.zeros((1, o))
-        
+
     def backward(self, h_next, x_t):
         """[summary]
 
