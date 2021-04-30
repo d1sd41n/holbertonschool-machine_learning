@@ -7,6 +7,19 @@ Returns:
 import numpy as np
 
 
+def softmax(x):
+    """[summary]
+
+    Args:
+        x ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    return np.exp(x) / np.sum(
+        np.exp(x), axis=1, keepdims=True)
+
+
 class BidirectionalCell:
     """[summary]
     """
