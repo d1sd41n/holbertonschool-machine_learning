@@ -64,11 +64,11 @@ class GRUCell:
         Returns:
             [type]: [description]
         """
-        h_x = np.concatenate((h_prev, x_t), axis=1)
-        z_t = sigmoid(np.matmul(h_x, self.Wz) + self.bz)
-        r_t = sigmoid(np.matmul(h_x, self.Wr) + self.br)
-        h_x = np.concatenate((r_t * h_prev, x_t), axis=1)
-        r_h = (1 - z_t) * h_prev + z_t * np.tanh(
-            np.matmul(h_x, self.Wh) + self.bh)
-        Z_y = np.matmul(h_next, self.Wy) + self.by
-        return r_h, softmax(Z_y)
+        matrix = np.concatenate((h_prev, x_t), axis=1)
+        z_t = sigmoid(np.matmul(matrix, self.Wz) + self.bz)
+        r_t = sigmoid(np.matmul(matrix, self.Wr) + self.br)
+        matrix2 = np.concatenate((r_t * h_prev, x_t), axis=1)
+        prime_h = np.tanh(np.matmul(matrix2, self.Wh) + self.bh)
+        h_next = (1 - z_t) * h_prev + z_t * prime_h
+        y = self.softmax(np.matmul(h_next, self.Wy) + self.by)
+        return h_next, y
