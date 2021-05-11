@@ -131,37 +131,6 @@ class WindowGenerator:
         return ds
 
 
-class Baseline(tf.keras.Model):
-    """[summary]
-
-    Args:
-        tf ([type]): [description]
-    """
-
-    def __init__(self, label_index=None):
-        """[summary]
-
-        Args:
-            label_index ([type], optional): [description]. Defaults to None.
-        """
-        super().__init__()
-        self.label_index = label_index
-
-    def call(self, inputs):
-        """[summary]
-
-        Args:
-            inputs ([type]): [description]
-
-        Returns:
-            [type]: [description]
-        """
-        if self.label_index is None:
-            return inputs
-        result = inputs[:, :, self.label_index]
-        return result[:, :, tf.newaxis]
-
-
 def build_model():
     """[summary]
 
@@ -201,5 +170,38 @@ def compile_and_fit(model, window, patience=2, epochs=500):
         callbacks=[early_stopping])
     print(model.summary())
     return history
+
+
+class Baseline(tf.keras.Model):
+    """[summary]
+
+    Args:
+        tf ([type]): [description]
+    """
+
+    def __init__(self, label_index=None):
+        """[summary]
+
+        Args:
+            label_index ([type], optional): [description]. Defaults to None.
+        """
+        super().__init__()
+        self.label_index = label_index
+
+    def call(self, inputs):
+        """[summary]
+
+        Args:
+            inputs ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        if self.label_index is None:
+            return inputs
+        result = inputs[
+            :, :, self.label_index]
+        return result[
+            :, :, tf.newaxis]
 
 
