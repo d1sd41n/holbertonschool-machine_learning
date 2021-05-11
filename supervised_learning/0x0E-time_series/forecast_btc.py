@@ -29,51 +29,24 @@ class WindowGenerator:
         self.train_df = train_df
         self.val_df = val_df
         self.test_df = test_df
-
         self.label_columns = label_columns
         if label_columns is not None:
-            self.label_columns_indices = {name: i for i, name in
-                                          enumerate(label_columns)}
+            self.label_columns_indices = {
+                name: i for i, name in
+                enumerate(label_columns)}
         self.column_indices = {name: i for i, name in
                                enumerate(train_df.columns)}
-
         self.input_width = input_width
         self.label_width = label_width
         self.shift = shift
-
         self.total_window_size = input_width + shift
-
         self.input_slice = slice(0, input_width)
         self.input_indices = \
             np.arange(self.total_window_size)[self.input_slice]
-
         self.label_start = self.total_window_size - self.label_width
         self.labels_slice = slice(self.label_start, None)
         self.label_indices = \
             np.arange(self.total_window_size)[self.labels_slice]
-
-    def split_window(self, features):
-        """[summary]
-
-        Args:
-            features ([type]): [description]
-
-        Returns:
-            [type]: [description]
-        """
-        inputs = features[:, self.input_slice, :]
-        labels = features[:, self.labels_slice, :]
-
-        if self.label_columns is not None:
-            labels = tf.stack(
-                [labels[:, :, self.column_indices[name]]
-                 for name in self.label_columns],
-                axis=-1)
-        inputs.set_shape([None, self.input_width, None])
-        labels.set_shape([None, self.label_width, None])
-
-        return inputs, labels
-
 
     def plot(self, model=None, plot_col='Close', max_subplots=3):
         """[summary]
@@ -92,18 +65,20 @@ class WindowGenerator:
             plt.ylabel('{} [normed]'.format(plot_col))
             plt.plot(self.input_indices, inputs[n, :, plot_col_index],
                      label='Inputs', marker='.', zorder=-10)
-
             if self.label_columns:
-                label_col_index = self.label_columns_indices.get(plot_col,
-                                                                 None)
+                label_col_index = self.label_columns_indices.get(
+                    plot_col,
+                    None)
             else:
                 label_col_index = plot_col_index
-
             if label_col_index is None:
                 continue
-
-            plt.scatter(self.label_indices, labels[n, :, label_col_index],
-                        edgecolors='k', label='Labels', c='#2ca02c', s=64)
+            plt.scatter(self.label_indices,
+                        labels[n, :, label_col_index],
+                        edgecolors='k',
+                        label='Labels',
+                        c='#2ca02c',
+                        s=64)
             if model is not None:
                 predictions = model(inputs)
                 plt.scatter(self.label_indices,
@@ -111,11 +86,29 @@ class WindowGenerator:
                             marker='X', edgecolors='k',
                             label='Predictions',
                             c='#ff7f0e', s=64)
-
             if n == 0:
                 plt.legend()
-
         plt.xlabel('Time [h]')
+
+    def split_window(self, features):
+        """[summary]
+
+        Args:
+            features ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        inputs = features[:, self.input_slice, :]
+        labels = features[:, self.labels_slice, :]
+        if self.label_columns is not None:
+            labels = tf.stack(
+                [labels[:, :, self.column_indices[name]]
+                 for name in self.label_columns],
+                axis=-1)
+        inputs.set_shape([None, self.input_width, None])
+        labels.set_shape([None, self.label_width, None])
+        return inputs, labels
 
     def make_dataset(self, data):
         """[summary]
@@ -134,9 +127,7 @@ class WindowGenerator:
             sequence_stride=1,
             shuffle=True,
             batch_size=32, )
-
         ds = ds.map(self.split_window)
-
         return ds
 
 
@@ -200,13 +191,15 @@ def compile_and_fit(model, window, patience=2, epochs=500):
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
                                                       patience=patience,
                                                       mode='min')
-
     model.compile(loss=tf.losses.MeanSquaredError(),
                   optimizer=tf.optimizers.Adam(),
-                  metrics=[tf.metrics.MeanAbsoluteError()])
-    history = model.fit(window.train, epochs=epochs,
-                        validation_data=window.val,
-                        callbacks=[early_stopping])
+                  metrics=[
+                      tf.metrics.MeanAbsoluteError()])
+    history = model.fit(
+        window.train, epochs=epochs,
+        validation_data=window.val,
+        callbacks=[early_stopping])
     print(model.summary())
     return history
+
 
