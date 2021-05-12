@@ -28,13 +28,18 @@ def word2vec_model(sentences, size=100, min_count=5,
     Returns:
         [type]: [description]
     """
-    w2v = Word2Vec(sentences, size=size,
-                   window=window,
-                   min_count=min_count,
-                   negative=negative,
-                   workers=workers,
-                   sg=cbow, seed=seed,
-                   iter=iterations)
-    return w2v.train(sentences,
-                     total_examples=w2v.corpus_count,
-                     epochs=w2v.epochs)
+    w_2v = Word2Vec(sentences,
+                    size=size,
+                    window=window,
+                    min_count=min_count,
+                    negative=negative,
+                    workers=workers,
+                    sg=cbow,
+                    seed=seed,
+                    iter=iterations)
+    w_2v.train(
+        sentences,
+        total_examples=w_2v.corpus_count,
+        epochs=w_2v.epochs
+    )
+    return w_2v
