@@ -42,7 +42,9 @@ def ngram_bleu(references, sentence, n):
     if len(sentence) >= aux:
         brevity = 1
     else:
-        brevity = np.exp(1 - (aux + n - 1) / (len(sentence) + n - 1))
+        brevity = np.exp(
+            1 - (aux + n - 1) / (
+                len(sentence) + n - 1))
     return brevity * in_ref / len(sentence)
 
 
