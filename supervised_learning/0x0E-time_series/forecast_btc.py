@@ -203,5 +203,3 @@ class Baseline(tf.keras.Model):
             :, :, self.label_index]
         return result[
             :, :, tf.newaxis]
-
-
