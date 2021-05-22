@@ -24,20 +24,13 @@ class RNNDecoder(tf.keras.layers.Layer):
             units ([type]): [description]
             batch ([type]): [description]
         """
-        super(RNNDecoder, self).__init__()
-        self.embedding = tf.keras.layers.Embedding(
-            vocab,
-            embedding
-        )
-        self.gru = tf.keras.layers.GRU(
-            units,
-            recurrent_initializer='glorot_uniform',
-            return_sequences=True,
-            return_state=True
-        )
-        self.F = tf.keras.layers.Dense(
-            vocab
-        )
+        super().__init__()
+        self.embedding = tf.keras.layers.Embedding(vocab, embedding)
+        self.gru = tf.keras.layers.GRU(units,
+                                       recurrent_initializer='glorot_uniform',
+                                       return_sequences=True,
+                                       return_state=True)
+        self.F = tf.keras.layers.Dense(vocab)
 
     def call(self, x, s_prev, hidden_states):
         """[summary]
@@ -50,28 +43,12 @@ class RNNDecoder(tf.keras.layers.Layer):
         Returns:
             [type]: [description]
         """
-        _, u = s_prev.shape
-        t, _ = SelfAttention(
-            u
-        )(
-            s_prev,
-            hidden_states
-        )
-        out_1, h = self. \
-            gru(
-                tf.concat(
-                    [tf.expand_dims(t,
-                                    1
-                                    ),
-                     self.embedding(
-                         x
-                    )
-                    ],
-                    axis=-1
-                )
-            )
-        out_1 = tf.reshape(
-            out_1,
-            (out_1.shape[0],
-             out_1.shape[2]))
-        return self.F(out_1), h
+        units = s_prev.shape[1]
+        attention = SelfAttention(units)
+        context, weights = attention(s_prev, hidden_states)
+        x = self.embedding(x)
+        x = tf.concat([tf.expand_dims(context, 1), x], -1)
+        output, state = self.gru(x)
+        output = tf.reshape(output, (-1, output.shape[2]))
+        y = self.F(output)
+        return (y, state)
