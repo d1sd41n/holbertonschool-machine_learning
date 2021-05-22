@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Function sdp_attention."""
+"""[summary]
+
+Returns:
+    [type]: [description]
+"""
+
 import tensorflow as tf
 
 
@@ -15,14 +20,16 @@ def sdp_attention(Q, K, V, mask=None):
     Returns:
         [type]: [description]
     """
-    qpk = tf.matmul(Q, K,
-                    transpose_b=True) / tf.sqrt(
-                        tf.cast(tf.shape(K)[-1], tf.float32))
+    dk_float = tf.cast(tf.shape(Q)[-1], tf.float32)
+    scaled = tf.matmul(Q,
+                       K,
+                       transpose_b=True
+                       ) / tf.math.sqrt(dk_float)
     if mask is not None:
-        qpk += mask * -1e9
-    weights = tf.nn.softmax(
-        qpk,
-        axis=-1
-        )
-    output = tf.matmul(weights, V)
-    return output, weights
+        scaled += (mask * -1e9)
+    w = tf.nn.softmax(
+        scaled,
+        axis=-1)
+    return tf.matmul(w, V), tf.nn.softmax(
+        scaled,
+        axis=-1)
