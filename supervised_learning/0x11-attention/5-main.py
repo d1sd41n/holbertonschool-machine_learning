@@ -4,32 +4,40 @@
 Returns:
     [type]: [description]
 """
+import numpy as np
 
-import tensorflow as tf
 
-
-def sdp_attention(Q, K, V, mask=None):
+def get_angles(pos, i, d_model):
     """[summary]
 
     Args:
-        Q ([type]): [description]
-        K ([type]): [description]
-        V ([type]): [description]
-        mask ([type], optional): [description]. Defaults to None.
+        pos ([type]): [description]
+        i ([type]): [description]
+        d_model ([type]): [description]
 
     Returns:
         [type]: [description]
     """
-    dk_float = tf.cast(tf.shape(Q)[-1], tf.float32)
-    scaled = tf.matmul(Q,
-                       K,
-                       transpose_b=True
-                       ) / tf.math.sqrt(dk_float)
-    if mask is not None:
-        scaled += (mask * -1e9)
-    w = tf.nn.softmax(
-        scaled,
-        axis=-1)
-    return tf.matmul(w, V), tf.nn.softmax(
-        scaled,
-        axis=-1)
+    angle_rates = 1 / np.power(10000, (2 * (i//2)) / np.float32(d_model))
+    return pos * angle_rates
+
+
+def positional_encoding(max_seq_len, dm):
+    """[summary]
+
+    Args:
+        max_seq_len ([type]): [description]
+        dm ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    pos_encoding = get_angles(np.arange(max_seq_len)[:, np.newaxis],
+                              np.arange(dm)[np.newaxis, :],
+                              dm
+                              )
+    pos_encoding[:, 0::2] = np.sin(
+        pos_encoding[:, 0::2])
+    pos_encoding[:, 1::2] = np.cos(
+        pos_encoding[:, 1::2])
+    return pos_encoding
