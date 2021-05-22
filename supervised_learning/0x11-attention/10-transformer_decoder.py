@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-"""contains the Decoder class"""
+"""[summary]
 
+Returns:
+    [type]: [description]
+"""
 import tensorflow as tf
 
 positional_encoding = __import__('4-positional_encoding').positional_encoding
