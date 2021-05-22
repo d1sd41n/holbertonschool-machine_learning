@@ -17,15 +17,13 @@ def positional_encoding(max_seq_len, dm):
     Returns:
         [type]: [description]
     """
-    f = 1 / (np.power(10000,
-                      (2*(np.arange(dm
-                                    )[np.newaxis, :
-                                        ]//2)/np.float32(
-                                            dm))))
-    Wt = (f * np.arange(max_seq_len)[:, np.newaxis])
-    tp = np.zeros(
-        (max_seq_len, dm)
-        )
-    tp[:, 0::2] = np.sin(Wt[:, 0::2])
-    tp[:, 1::2] = np.cos(Wt[:, 1::2])
-    return tp
+    pos = np.arange(
+        max_seq_len)[:, np.newaxis]
+    d = np.arange(
+        dm)[np.newaxis, :]
+    PE = pos / np.power(
+        10000, (2 * (d//2
+                     )) / np.float32(dm))
+    PE[:, 0::2] = np.sin(PE[:, 0::2])
+    PE[:, 1::2] = np.cos(PE[:, 1::2])
+    return PE
