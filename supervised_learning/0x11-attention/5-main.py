@@ -1,13 +1,28 @@
 #!/usr/bin/env python3
-
-import numpy as np
+"""Function sdp_attention."""
 import tensorflow as tf
-sdp_attention = __import__('5-sdp_attention').sdp_attention
 
-np.random.seed(0)
-Q = tf.convert_to_tensor(np.random.uniform(size=(50, 10, 256)).astype('float32'))
-K = tf.convert_to_tensor(np.random.uniform(size=(50, 15, 256)).astype('float32'))
-V = tf.convert_to_tensor(np.random.uniform(size=(50, 15, 512)).astype('float32'))
-output, weights = sdp_attention(Q, K, V)
-print(output)
-print(weights)
+
+def sdp_attention(Q, K, V, mask=None):
+    """[summary]
+
+    Args:
+        Q ([type]): [description]
+        K ([type]): [description]
+        V ([type]): [description]
+        mask ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        [type]: [description]
+    """
+    qpk = tf.matmul(Q, K,
+                    transpose_b=True) / tf.sqrt(
+                        tf.cast(tf.shape(K)[-1], tf.float32))
+    if mask is not None:
+        qpk += mask * -1e9
+    weights = tf.nn.softmax(
+        qpk,
+        axis=-1
+        )
+    output = tf.matmul(weights, V)
+    return output, weights
