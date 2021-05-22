@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
+"""[summary]
 
-import numpy as np
+Returns:
+    [type]: [description]
+"""
 import tensorflow as tf
-MultiHeadAttention = __import__('6-multihead_attention').MultiHeadAttention
 
-mha = MultiHeadAttention(512, 8)
-print(mha.dm)
-print(mha.h)
-print(mha.depth)
-print(mha.Wq)
-print(mha.Wk)
-print(mha.Wv)
-print(mha.linear)
-Q = tf.convert_to_tensor(np.random.uniform(size=(50, 15, 256)).astype('float32'))
-K = tf.convert_to_tensor(np.random.uniform(size=(50, 15, 256)).astype('float32'))
-V = tf.convert_to_tensor(np.random.uniform(size=(50, 15, 256)).astype('float32'))
-output, weights = mha(Q, K, V, None)
-print(output)
-print(weights)
+
+def sdp_attention(Q, K, V, mask=None):
+    """[summary]
+
+    Args:
+        Q ([type]): [description]
+        K ([type]): [description]
+        V ([type]): [description]
+        mask ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        [type]: [description]
+    """
+    scaled = tf.matmul(Q, K, transpose_b=True) / tf.math.sqrt(
+        tf.cast(tf.shape(Q)[-1],
+                tf.float32))
+    if mask is not None:
+        scaled += (mask * -1e9)
+    w = tf.nn.softmax(
+        scaled, axis=-1)
+    return tf.matmul(w, V), w
