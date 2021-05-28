@@ -4,26 +4,27 @@
 Returns:
     [type]: [description]
 """
-import tensorflow as tf
+import tensorflow.compat.v2 as tf
 import tensorflow_datasets as tfds
 
 
 class Dataset:
     """[summary]
     """
+
     def __init__(self):
         """[summary]
         """
-        self.data_train = tfds.load(name='ted_hrlr_translate/pt_to_en',
-                                    split='train',
-                                    as_supervised=True)
-        self.data_valid = tfds.load(name='ted_hrlr_translate/pt_to_en',
-                                    split='validation',
-                                    as_supervised=True)
-
-        tokenizer_pt, tokenizer_en = self.tokenize_dataset(self.data_train)
-        self.tokenizer_pt = tokenizer_pt
-        self.tokenizer_en = tokenizer_en
+        examples, metadata = tfds.load('ted_hrlr_translate/pt_to_en',
+                                       with_info=True,
+                                       as_supervised=True
+                                       )
+        self.data_train, self.data_valid = examples['train'], \
+            examples['validation']
+        self.tokenizer_pt, self.tokenizer_en = \
+            self.tokenize_dataset(
+                self.data_train
+            )
         self.data_train = self.data_train.map(self.tf_encode)
         self.data_valid = self.data_valid.map(self.tf_encode)
 
@@ -36,16 +37,12 @@ class Dataset:
         Returns:
             [type]: [description]
         """
-        data_pt = []
-        data_en = []
-        for pt, en in tfds.as_numpy(data):
-            data_pt.append(pt.decode('utf-8'))
-            data_en.append(en.decode('utf-8'))
-        SubwordTextEncoder = tfds.deprecated.text.SubwordTextEncoder
-        tokenizer_pt = SubwordTextEncoder.build_from_corpus(data_pt,
-                                                            target_vocab_size=2**15)
-        tokenizer_en = SubwordTextEncoder.build_from_corpus(data_en,
-                                                            target_vocab_size=2**15)
+        tokenizer_pt = tfds.features.text.SubwordTextEncoder.build_from_corpus(
+            (pt.numpy() for pt, en in data),
+            target_vocab_size=2 ** 15)
+        tokenizer_en = tfds.features.text.SubwordTextEncoder.build_from_corpus(
+            (en.numpy() for pt, en in data),
+            target_vocab_size=2 ** 15)
         return tokenizer_pt, tokenizer_en
 
     def encode(self, pt, en):
@@ -58,12 +55,10 @@ class Dataset:
         Returns:
             [type]: [description]
         """
-        pt_voc_size = self.tokenizer_pt.vocab_size
-        en_voc_size = self.tokenizer_en.vocab_size
-        pt_tokens = self.tokenizer_pt.encode(pt.numpy().decode('utf-8'))
-        en_tokens = self.tokenizer_en.encode(en.numpy().decode('utf-8'))
-        pt_tokens = [pt_voc_size] + pt_tokens + [pt_voc_size + 1]
-        en_tokens = [en_voc_size] + en_tokens + [en_voc_size + 1]
+        pt_tokens = [self.tokenizer_pt.vocab_size] + self.tokenizer_pt.encode(
+            pt.numpy()) + [self.tokenizer_pt.vocab_size + 1]
+        en_tokens = [self.tokenizer_en.vocab_size] + self.tokenizer_en.encode(
+            en.numpy()) + [self.tokenizer_en.vocab_size + 1]
         return pt_tokens, en_tokens
 
     def tf_encode(self, pt, en):
@@ -76,13 +71,11 @@ class Dataset:
         Returns:
             [type]: [description]
         """
-        pt_tokens, en_tokens = tf.py_function(self.encode,
-                                              [pt, en],
-                                              [tf.int64, tf.int64])
-        pt = tf.convert_to_tensor(pt_tokens, dtype=tf.int64)
-        en = tf.convert_to_tensor(en_tokens, dtype=tf.int64)
-        pt = tf.reshape(pt, [-1])
-        en = tf.reshape(en, [-1])
-        return pt, en
-
-    Dataset.tf_encode = tf_encode
+        result_pt, result_en = tf.py_function(
+            self.encode,
+            [pt, en],
+            [tf.int64, tf.int64]
+        )
+        result_pt.set_shape([None])
+        result_en.set_shape([None])
+        return result_pt, result_en
