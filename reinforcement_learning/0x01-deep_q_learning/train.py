@@ -114,7 +114,7 @@ if __name__ == '__main__':
                    train_interval=4, delta_clip=1.)
     dqn.compile(K.optimizers.Adam(lr=.00025), metrics=['mae'])
     dqn.fit(env,
-            nb_steps=17500,
+            nb_steps=17000000,
             log_interval=10000,
             visualize=False,
             verbose=2)
