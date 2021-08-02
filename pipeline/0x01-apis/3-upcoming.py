@@ -1,41 +1,29 @@
 #!/usr/bin/env python3
-"""sddfdsdfd
+"""ddfdfddf
 """
-import requests
+import sys
+import requests as rq
 import time
 
 
 if __name__ == '__main__':
-    current_time = time.time()
-
-    response = requests.get('https://api.spacexdata.com/v4/launches/upcoming')
-    launches = response.json()
-
-    soonest_launch_idx = 0
-    soonest_launch_time = launches[0]['date_unix']
-    for i in range(len(launches)):
-        launch_time = launches[i]['date_unix']
-
-        if launch_time > current_time and launch_time < soonest_launch_time:
-            soonest_launch_idx = i
-            soonest_launch_time = launch_time
-
-    soonest_launch = launches[soonest_launch_idx]
-
-    launch_name = soonest_launch['name']
-    local_time_date = soonest_launch['date_local']
-    rocket_id = soonest_launch['rocket']
-    launchpad_id = soonest_launch['launchpad']
-
-    rocket_url = 'https://api.spacexdata.com/v4/rockets/' + rocket_id
-    rocket_response = requests.get(rocket_url)
-    rocket_name = rocket_response.json()['name']
-
-    launchpad_url = 'https://api.spacexdata.com/v4/launchpads/' + launchpad_id
-    launchpad_response = requests.get(launchpad_url)
-    launchpad_name = launchpad_response.json()['name']
-    launchpad_locality = launchpad_response.json()['locality']
-
-    print('{} ({}) {} - {} ({})'.format(launch_name, local_time_date,
-                                        rocket_name, launchpad_name,
-                                        launchpad_locality))
+    url = "https://api.spacexdata.com/v4/launches/upcoming"
+    r = rq.get(url)
+    launches = sorted(r.json(), key=lambda i: i['date_unix'])
+    date_unix = launches[0]['date_unix']
+    for i in r.json():
+        if i['date_unix'] == date_unix:
+            launch_name = i['name']
+            date = i['date_local']
+            rocket_id = i['rocket']
+            launchpad_id = i['launchpad']
+            break
+    url = "https://api.spacexdata.com/v4/rockets/{}".format(rocket_id)
+    r = rq.get(url)
+    rocket_name = r.json()['name']
+    url = "https://api.spacexdata.com/v4/launchpads/{}".format(launchpad_id)
+    r = rq.get(url)
+    lpad_name = r.json()['name']
+    lpad_locality = r.json()['locality']
+    print("{} ({}) {} - {} ({})".format(launch_name, date, rocket_name,
+                                        lpad_name, lpad_locality))
