@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """[summary]
+
+Returns:
+    [type]: [description]
 """
 import requests
 
@@ -9,6 +12,9 @@ def availableShips(passengerCount):
 
     Args:
         passengerCount ([type]): [description]
+
+    Returns:
+        [type]: [description]
     """
     starships_with_capacity = []
     next_page_url = 'https://swapi-api.hbtn.io/api/starships'
@@ -19,12 +25,11 @@ def availableShips(passengerCount):
         next_page_url = r_json['next']
         starships = r_json['results']
         for starship in starships:
-            capacity = starship.get(
-                'passengers', 0).replace(',', '')
+            capacity = starship.get('passengers', 0).replace(',', '')
             try:
                 capacity = int(capacity)
             except ValueError:
                 continue
             if capacity >= passengerCount:
-                starships_with_capacity.append(
-                    starship['name'])
+                starships_with_capacity.append(starship['name'])
+    return starships_with_capacity
