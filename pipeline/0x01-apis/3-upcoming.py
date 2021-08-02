@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""[summary]
-"""
+"""Script to fetch spaceX API for next launch."""
 import requests
 import time
 
@@ -13,6 +12,7 @@ if __name__ == '__main__':
     soonest_launch_time = launches[0]['date_unix']
     for i in range(len(launches)):
         launch_time = launches[i]['date_unix']
+
         if launch_time > current_time and launch_time < soonest_launch_time:
             soonest_launch_idx = i
             soonest_launch_time = launch_time
