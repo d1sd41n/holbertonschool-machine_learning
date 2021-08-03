@@ -10,8 +10,8 @@ if __name__ == "__main__":
     client = MongoClient('mongodb://127.0.0.1:27017')
     nginx_collection = client.logs.nginx
     count_logs = nginx_collection.count_documents({})
-    status = nginx_collection.count_documents({'method': 'GET',
-                                               'path': '/status'})
+    path = {'method': 'GET', 'path': '/status'}
+    status = nginx_collection.count_documents(path)
     method = ["GET", "POST", "PUT", "PATCH", "DELETE"]
     print('{} logs'.format(count_logs))
     print('Methods:')
@@ -19,8 +19,7 @@ if __name__ == "__main__":
         n_data = nginx_collection.count_documents({'method': m})
         print('\tmethod {}: {}'.format(m, n_data))
     print('{} status check'.format(status))
-    pipeline = [{'$unwind': '$ip'}, {"$sortByCount": '$ip'},
-                {'$limit': 10}]
+    pipeline = [{'$unwind': '$ip'}, {"$sortByCount": '$ip'}, {'$limit': 10}]
     a_ip = nginx_collection.aggregate(pipeline)
     data_ip = [i for i in a_ip]
     print('IPs:')
