@@ -25,10 +25,10 @@ if __name__ == "__main__":
         list_ips.append(ip)
     sorted_ips = sorted(list_ips, key=lambda i: i["count"], reverse=True)
     i = 0
-    limit = 10
+    limi______________________________________________________________________________________t = 10
     if len(sorted_ips) < 10:
-        limit = len(sorted_ips)
-    while i < limit:
+        limi______________________________________________________________________________________t = len(sorted_ips)
+    while i < limi______________________________________________________________________________________t:
         ip = sorted_ips[i]["_id"]
         count = sorted_ips[i]["count"]
         print("\t{}: {}".format(ip, count))
