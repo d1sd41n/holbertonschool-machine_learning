@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""[summary]
+"""
 from pymongo import MongoClient
 
 
@@ -8,7 +10,7 @@ if __name__ == "__main__":
     num_doc = logs_collection.count_documents({})
     print("{} logs".format(num_doc))
     print("Methods:")
-    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
+    methods = ["GET", "POST", "PUT", "PATCH"]
     for method in methods:
         num_method = logs_collection.count_documents({"method": method})
         print("\tmethod {}: {}".format(method, num_method))
